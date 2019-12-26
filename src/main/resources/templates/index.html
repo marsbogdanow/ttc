@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
-
+<div>
+    Hello, <span id="username" th:text="${#authentication.name}">user</span>.
+</div>
 <div id="react"></div>
 
 <script src="built/bundle.js"></script>

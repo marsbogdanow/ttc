@@ -1,5 +1,6 @@
 package com.marstracker.ttc.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="words")
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class Word {
     @Id
@@ -26,4 +28,9 @@ public class Word {
     private String note;
     @ManyToOne(optional = false)
     private AppUser appUser;
+
+    public AppUser getAppUser() {
+        System.out.println("User email -- " + appUser.getEmail());
+        return appUser;
+    }
 }

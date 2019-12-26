@@ -34,41 +34,65 @@ public class Initializer implements CommandLineRunner {
             appUserRepository.save(appUser);
             });
 
-        AppUser appUser = new AppUser();
-        appUser.setEmail("test@gmail.com");
-        appUser.setName("Максим");
-        appUser.setPassword("serene");
-        appUser.setRoles(new String[]{"WORDSET_OWNER"});
-        appUserRepository.save(appUser);
+        AppUser appUserIt = new AppUser();
+        appUserIt.setEmail("testit@gmail.com");
+        appUserIt.setName("МаксимIt");
+        appUserIt.setPassword("serene");
+        appUserIt.setRoles(new String[]{"WORDSET_OWNER"});
+        appUserRepository.save(appUserIt);
 
         SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken("test@gmail.com", "doesn't matter",
+                new UsernamePasswordAuthenticationToken("testit@gmail.com", "doesn't matter",
                         AuthorityUtils.createAuthorityList("WORDSET_OWNER")));
+
+        AppUser appUserEng = new AppUser();
+        appUserEng.setEmail("testen@gmail.com");
+        appUserEng.setName("МаксимEng");
+        appUserEng.setPassword("serene");
+        appUserEng.setRoles(new String[]{"WORDSET_OWNER"});
+        appUserRepository.save(appUserEng);
 
         WordSet wordSet = new WordSet();
         wordSet.setName("Ru-It");
-        wordSet.setAppUser(appUserRepository.findByEmail("Test"));
+        wordSet.setAppUser(appUserRepository.findByEmail("testit@gmail.com"));
         wordSetRepository.save(wordSet);
+
+        WordSet wordSetEn = new WordSet();
+        wordSetEn.setName("Ru-En");
+        wordSetEn.setAppUser(appUserRepository.findByEmail("testen@gmail.com"));
+        wordSetRepository.save(wordSetEn);
 
         Word word1 = new Word();
         word1.setMeaning("идти");
         word1.setWordToLearn("andare");
         //word1.setWordSet(wordSet);
         word1.setNote("Неправильный глагол");
-        word1.setAppUser(appUser);
+        word1.setAppUser(appUserIt);
         wordRepository.save(word1);
         Word word2 = new Word();
         word2.setMeaning("Искать");
         word2.setWordToLearn("cercare");
-        word2.setAppUser(appUser);
+        word2.setAppUser(appUserIt);
         //word2.setWordSet(wordSet);
         wordRepository.save(word2);
         Word word3 = new Word();
         word3.setMeaning("Находить");
         word3.setWordToLearn("trovare");
-        word3.setAppUser(appUser);
+        word3.setAppUser(appUserIt);
         //word3.setWordSet(wordSet);
         wordRepository.save(word3);
+
+        // Eng
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("testen@gmail.com", "doesn't matter",
+                        AuthorityUtils.createAuthorityList("WORDSET_OWNER")));
+
+        Word word10 = new Word();
+        word10.setMeaning("Прыгать");
+        word10.setWordToLearn("jump");
+        word10.setAppUser(appUserEng);
+        //word3.setWordSet(wordSet);
+        wordRepository.save(word10);
 
         SecurityContextHolder.clearContext();
     }

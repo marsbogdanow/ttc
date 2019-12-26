@@ -24,14 +24,21 @@ public class SpringDataRestEventHandler {
     @HandleBeforeSave
     public void applyUserInformationUsingSecurityContext(Word word) {
 
+        System.out.println("word?.appUser -- " + word.getAppUser());
+
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         AppUser appUser = userRepository.findByEmail(name);
+
+        System.out.println("appUser -- " + appUser);
         if (appUser == null) {
+            System.out.println("Here");
             AppUser newAppUser = new AppUser();
             newAppUser.setEmail(name);
             newAppUser.setRoles(new String[]{"WORDSET_OWNER"});
             newAppUser.setName(name);
             appUser = userRepository.save(newAppUser);
         }
-        word.setAppUser(appUser);
+        if (word.getAppUser() == null) {
+            word.setAppUser(appUser);
+        }
     }}

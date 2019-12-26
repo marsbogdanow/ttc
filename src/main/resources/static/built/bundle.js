@@ -44458,7 +44458,8 @@ function (_React$Component) {
       attributes: [],
       words: [],
       links: [],
-      page: 1
+      page: 1,
+      loggedInAppUser: _this.props.loggedInAppUser
     };
     _this.updatePageSize = _this.updatePageSize.bind(_assertThisInitialized(_this));
     _this.onCreate = _this.onCreate.bind(_assertThisInitialized(_this));
@@ -44620,6 +44621,7 @@ function (_React$Component) {
     value: function onUpdate(word, updatedWord) {
       var _this6 = this;
 
+      updatedWord["appUser"] = word.entity.appUser;
       client({
         method: 'PUT',
         path: word.entity._links.self.href,
@@ -44679,7 +44681,8 @@ function (_React$Component) {
         attributes: this.state.attributes,
         links: this.state.links,
         onNavigate: this.onNavigate,
-        onUpdate: this.onUpdate
+        onUpdate: this.onUpdate,
+        loggedInAppUser: this.state.loggedInAppUser
       }));
     }
   }]);
@@ -44753,7 +44756,8 @@ function (_React$Component2) {
           key: word.entity._links.self.href,
           word: word,
           attributes: _this9.props.attributes,
-          onUpdate: _this9.props.onUpdate
+          onUpdate: _this9.props.onUpdate,
+          loggedInAppUser: _this9.props.loggedInAppUser
         });
       });
       var navLinks = [];
@@ -44790,7 +44794,7 @@ function (_React$Component2) {
         ref: "pageSize",
         defaultValue: this.props.pageSize,
         onInput: this.handleInput
-      }), React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("th", null, "Word to learn"), React.createElement("th", null, "Meaning"), React.createElement("th", null, "Note"), React.createElement("th", null, "Version")), words)), React.createElement("div", null, navLinks));
+      }), React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("th", null, "Word to learn"), React.createElement("th", null, "Meaning"), React.createElement("th", null, "Note"), React.createElement("th", null, "Version"), React.createElement("th", null, "User")), words)), React.createElement("div", null, navLinks));
     }
   }]);
 
@@ -44811,10 +44815,11 @@ function (_React$Component3) {
   _createClass(Word, [{
     key: "render",
     value: function render() {
-      return React.createElement("tr", null, React.createElement("td", null, this.props.word.entity.wordToLearn), React.createElement("td", null, this.props.word.entity.meaning), React.createElement("td", null, this.props.word.entity.note), React.createElement("td", null, this.props.word.entity.version), React.createElement("td", null, React.createElement(UpdateDialog, {
+      return React.createElement("tr", null, React.createElement("td", null, this.props.word.entity.wordToLearn), React.createElement("td", null, this.props.word.entity.meaning), React.createElement("td", null, this.props.word.entity.note), React.createElement("td", null, this.props.word.entity.version), React.createElement("td", null, this.props.word.entity.appUser.email), React.createElement("td", null, React.createElement(UpdateDialog, {
         word: this.props.word,
         attributes: this.props.attributes,
-        onUpdate: this.props.onUpdate
+        onUpdate: this.props.onUpdate,
+        loggedInAppUser: this.props.loggedInAppUser
       })));
     }
   }]);
@@ -44949,7 +44954,9 @@ function (_React$Component5) {
   return UpdateDialog;
 }(React.Component);
 
-ReactDOM.render(React.createElement(App, null), document.getElementById('react'));
+ReactDOM.render(React.createElement(App, {
+  loggedInAppUser: document.getElementById('username').innerHTML
+}), document.getElementById('react'));
 
 /***/ }),
 

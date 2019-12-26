@@ -1,13 +1,16 @@
 package com.marstracker.ttc.model;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-@PreAuthorize("hasRole('WORDSET_OWNER')")
-public interface WordRepository extends JpaRepository<Word, Long> {
+import java.util.List;
+@PreAuthorize("hasAuthority('WORDSET_OWNER')")
+public interface WordRepository extends PagingAndSortingRepository<Word, Long> {
     @Override
-    @PreAuthorize("#word?.appUser == null or #word?.appUser?.email == authentication?.name")
+    @PreAuthorize("#word.id == null or #word?.appUser?.email == authentication?.name")
     Word save(@Param("word") Word word);
+
+    @Override
+    List<Word> findAll();
 }

@@ -13,7 +13,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-        this.state = {pageSize: 2, attributes: [], words: [], links: [], page: 1};
+        this.state = {pageSize: 2, attributes: [], words: [], links: [], page: 1, loggedInAppUser: this.props.loggedInAppUser};
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
@@ -137,6 +137,7 @@ class App extends React.Component {
 	}
 
     onUpdate(word, updatedWord) {
+        updatedWord["appUser"] = word.entity.appUser
         client({
             method: 'PUT',
             path: word.entity._links.self.href,
@@ -194,6 +195,7 @@ class App extends React.Component {
                     links={this.state.links}
                     onNavigate={this.onNavigate}
                     onUpdate={this.onUpdate}
+                    loggedInAppUser={this.state.loggedInAppUser}
                  />
             </div>
 		)
@@ -250,6 +252,7 @@ class WordList extends React.Component{
 			        word={word}
 			        attributes={this.props.attributes}
 			        onUpdate={this.props.onUpdate}
+			        loggedInAppUser={this.props.loggedInAppUser}
 			/>
 		);
 		const navLinks = [];
@@ -276,6 +279,7 @@ class WordList extends React.Component{
 						<th>Meaning</th>
 						<th>Note</th>
 						<th>Version</th>
+						<th>User</th>
 					</tr>
 					{words}
 				</tbody>
@@ -296,10 +300,13 @@ class Word extends React.Component{
 				<td>{this.props.word.entity.meaning}</td>
 				<td>{this.props.word.entity.note}</td>
 				<td>{this.props.word.entity.version}</td>
+				<td>{this.props.word.entity.appUser.email}</td>
                 <td>
 					<UpdateDialog word={this.props.word}
 								  attributes={this.props.attributes}
-								  onUpdate={this.props.onUpdate}/>
+								  onUpdate={this.props.onUpdate}
+								  loggedInAppUser={this.props.loggedInAppUser}
+								  />
 				</td>
 			</tr>
 		)
@@ -407,6 +414,6 @@ class UpdateDialog extends React.Component {
 }
 
 ReactDOM.render(
-	<App/>,
+	<App loggedInAppUser={document.getElementById('username').innerHTML }/>,
 	document.getElementById('react')
 )

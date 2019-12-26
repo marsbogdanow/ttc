@@ -11,6 +11,7 @@ import static com.marstracker.ttc.service.SpringDataJpaUserDetailsService.PASSWO
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 @EqualsAndHashCode
