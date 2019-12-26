@@ -28,9 +28,4 @@ public class Word {
     private String note;
     @ManyToOne(optional = false)
     private AppUser appUser;
-
-    public AppUser getAppUser() {
-        System.out.println("User email -- " + appUser.getEmail());
-        return appUser;
-    }
 }
