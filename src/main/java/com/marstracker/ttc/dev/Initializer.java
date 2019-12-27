@@ -6,9 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 @Component
@@ -52,10 +49,10 @@ public class Initializer implements CommandLineRunner {
         appUserEng.setRoles(new String[]{"WORDSET_OWNER"});
         appUserRepository.save(appUserEng);
 
-        WordSet wordSet = new WordSet();
-        wordSet.setName("Ru-It");
-        wordSet.setAppUser(appUserRepository.findByEmail("testit@gmail.com"));
-        wordSetRepository.save(wordSet);
+        WordSet wordSetIt = new WordSet();
+        wordSetIt.setName("Ru-It");
+        wordSetIt.setAppUser(appUserRepository.findByEmail("testit@gmail.com"));
+        wordSetRepository.save(wordSetIt);
 
         WordSet wordSetEn = new WordSet();
         wordSetEn.setName("Ru-En");
@@ -65,21 +62,23 @@ public class Initializer implements CommandLineRunner {
         Word word1 = new Word();
         word1.setMeaning("идти");
         word1.setWordToLearn("andare");
-        //word1.setWordSet(wordSet);
+        word1.setWordSet(wordSetIt);
         word1.setNote("Неправильный глагол");
         word1.setAppUser(appUserIt);
         wordRepository.save(word1);
+
         Word word2 = new Word();
         word2.setMeaning("Искать");
         word2.setWordToLearn("cercare");
+        word2.setWordSet(wordSetIt);
         word2.setAppUser(appUserIt);
-        //word2.setWordSet(wordSet);
         wordRepository.save(word2);
+
         Word word3 = new Word();
         word3.setMeaning("Находить");
         word3.setWordToLearn("trovare");
+        word3.setWordSet(wordSetIt);
         word3.setAppUser(appUserIt);
-        //word3.setWordSet(wordSet);
         wordRepository.save(word3);
 
         // Eng
@@ -90,8 +89,8 @@ public class Initializer implements CommandLineRunner {
         Word word10 = new Word();
         word10.setMeaning("Прыгать");
         word10.setWordToLearn("jump");
+        word10.setWordSet(wordSetEn);
         word10.setAppUser(appUserEng);
-        //word3.setWordSet(wordSet);
         wordRepository.save(word10);
 
         SecurityContextHolder.clearContext();

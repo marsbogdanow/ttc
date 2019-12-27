@@ -278,7 +278,7 @@ class WordList extends React.Component{
 						<th>Word to learn</th>
 						<th>Meaning</th>
 						<th>Note</th>
-						<th>Version</th>
+						<th>WordSet</th>
 						<th>User</th>
 					</tr>
 					{words}
@@ -299,11 +299,12 @@ class Word extends React.Component{
 				<td>{this.props.word.entity.wordToLearn}</td>
 				<td>{this.props.word.entity.meaning}</td>
 				<td>{this.props.word.entity.note}</td>
-				<td>{this.props.word.entity.version}</td>
+				<td>{this.props.word.entity.wordSet.name}</td>
 				<td>{this.props.word.entity.appUser.email}</td>
                 <td>
 					<UpdateDialog word={this.props.word}
 								  attributes={this.props.attributes}
+								  wordSetId={this.props.word.entity.wordSet.id}
 								  onUpdate={this.props.onUpdate}
 								  loggedInAppUser={this.props.loggedInAppUser}
 								  />
@@ -376,21 +377,30 @@ class UpdateDialog extends React.Component {
             e.preventDefault();
             const updatedWord = {};
             this.props.attributes.forEach(attribute => {
-                updatedWord[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+                if (ReactDOM.findDOMNode(this.refs[attribute]) != null) {
+                    updatedWord[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+                } else {
+                    updatedWord[attribute] = this.props.word.entity[attribute];
+                }
             });
             this.props.onUpdate(this.props.word, updatedWord);
             window.location = "#";
     }
 
     render() {
-            const inputs = this.props.attributes.map(attribute =>
-                <p key={this.props.word.entity[attribute]}>
-                    <input type="text" placeholder={attribute}
-                           defaultValue={this.props.word.entity[attribute]}
-                           ref={attribute} className="field"/>
-                </p>
+            const inputs = this.props.attributes.map(attribute => {
+                if (this.props.word.entity[attribute] == null || typeof(this.props.word.entity[attribute]) == "string") {
+                    return (
+                        <p key={this.props.word.entity[attribute]}>
+                            <label for={attribute}>{attribute}:</label>
+                            <input type="text" placeholder={attribute} id={attribute}
+                                   defaultValue={this.props.word.entity[attribute]}
+                                   ref={attribute} className="field"/>
+                        </p>
+                        )
+                    }
+                }
             );
-
             const dialogId = "updateWord-" + this.props.word.entity._links.self.href;
 
             return (

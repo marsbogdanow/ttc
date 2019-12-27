@@ -44794,7 +44794,7 @@ function (_React$Component2) {
         ref: "pageSize",
         defaultValue: this.props.pageSize,
         onInput: this.handleInput
-      }), React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("th", null, "Word to learn"), React.createElement("th", null, "Meaning"), React.createElement("th", null, "Note"), React.createElement("th", null, "Version"), React.createElement("th", null, "User")), words)), React.createElement("div", null, navLinks));
+      }), React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("th", null, "Word to learn"), React.createElement("th", null, "Meaning"), React.createElement("th", null, "Note"), React.createElement("th", null, "WordSet"), React.createElement("th", null, "User")), words)), React.createElement("div", null, navLinks));
     }
   }]);
 
@@ -44815,9 +44815,10 @@ function (_React$Component3) {
   _createClass(Word, [{
     key: "render",
     value: function render() {
-      return React.createElement("tr", null, React.createElement("td", null, this.props.word.entity.wordToLearn), React.createElement("td", null, this.props.word.entity.meaning), React.createElement("td", null, this.props.word.entity.note), React.createElement("td", null, this.props.word.entity.version), React.createElement("td", null, this.props.word.entity.appUser.email), React.createElement("td", null, React.createElement(UpdateDialog, {
+      return React.createElement("tr", null, React.createElement("td", null, this.props.word.entity.wordToLearn), React.createElement("td", null, this.props.word.entity.meaning), React.createElement("td", null, this.props.word.entity.note), React.createElement("td", null, this.props.word.entity.wordSet.name), React.createElement("td", null, this.props.word.entity.appUser.email), React.createElement("td", null, React.createElement(UpdateDialog, {
         word: this.props.word,
         attributes: this.props.attributes,
+        wordSetId: this.props.word.entity.wordSet.id,
         onUpdate: this.props.onUpdate,
         loggedInAppUser: this.props.loggedInAppUser
       })));
@@ -44914,7 +44915,11 @@ function (_React$Component5) {
       e.preventDefault();
       var updatedWord = {};
       this.props.attributes.forEach(function (attribute) {
-        updatedWord[attribute] = ReactDOM.findDOMNode(_this13.refs[attribute]).value.trim();
+        if (ReactDOM.findDOMNode(_this13.refs[attribute]) != null) {
+          updatedWord[attribute] = ReactDOM.findDOMNode(_this13.refs[attribute]).value.trim();
+        } else {
+          updatedWord[attribute] = _this13.props.word.entity[attribute];
+        }
       });
       this.props.onUpdate(this.props.word, updatedWord);
       window.location = "#";
@@ -44925,16 +44930,31 @@ function (_React$Component5) {
       var _this14 = this;
 
       var inputs = this.props.attributes.map(function (attribute) {
-        return React.createElement("p", {
-          key: _this14.props.word.entity[attribute]
-        }, React.createElement("input", {
-          type: "text",
-          placeholder: attribute,
-          defaultValue: _this14.props.word.entity[attribute],
-          ref: attribute,
-          className: "field"
-        }));
-      });
+        if (_this14.props.word.entity[attribute] == null || typeof _this14.props.word.entity[attribute] == "string") {
+          return React.createElement("p", {
+            key: _this14.props.word.entity[attribute]
+          }, React.createElement("label", {
+            "for": attribute
+          }, attribute, ":"), React.createElement("input", {
+            type: "text",
+            placeholder: attribute,
+            id: attribute,
+            defaultValue: _this14.props.word.entity[attribute],
+            ref: attribute,
+            className: "field"
+          }));
+        }
+      }); //            const inputs = this.props.attributes.map(attribute =>
+      //                    if (typeof(this.props.word.entity[attribute]) == "string") {
+      //                        <p key={this.props.word.entity[attribute]}>
+      //                                <label for={attribute}>{attribute}:</label>
+      //                                <input type="text" placeholder={attribute} id={attribute}
+      //                                       defaultValue={this.props.word.entity[attribute]}
+      //                                       ref={attribute} className="field"/>
+      //                        </p>
+      //                    }
+      //            );
+
       var dialogId = "updateWord-" + this.props.word.entity._links.self.href;
       return React.createElement("div", null, React.createElement("a", {
         href: "#" + dialogId

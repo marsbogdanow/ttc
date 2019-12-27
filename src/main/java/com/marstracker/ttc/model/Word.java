@@ -28,4 +28,6 @@ public class Word {
     private String note;
     @ManyToOne(optional = false)
     private AppUser appUser;
+    @ManyToOne(optional = false)
+    private WordSet wordSet;
 }
